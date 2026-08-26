@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QC Snapshot Test Page</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+        .section { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        .canvas-container { border: 1px solid #000; width: 400px; height: 200px; position: relative; }
+        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
+        .svg-container { border: 1px solid #000; width: 400px; height: 200px; position: relative; margin-top: 10px; }
+        svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+        .interactive-svg-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; }
+        #ce-div { border: 1px dashed #666; min-height: 50px; padding: 10px; }
+        .btn { padding: 5px 10px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Annotation QC Snapshot Test</h1>
+
+    <div class="section" id="form-section">
+        <h2>1. Forms (DOM State)</h2>
+        <input type="text" id="text-input" placeholder="Type something..." />
+        <br><br>
+        <textarea id="textarea-input" rows="3" cols="30" placeholder="Type more..."></textarea>
+        <br><br>
+        <label><input type="checkbox" id="check-1"> Option A</label>
+        <label><input type="checkbox" id="check-2"> Option B</label>
+        <br><br>
+        <label><input type="radio" name="radio-group" value="yes" id="radio-yes"> Yes</label>
+        <label><input type="radio" name="radio-group" value="no" id="radio-no"> No</label>
+        <br><br>
+        <select id="select-input">
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+    </div>
+
+    <div class="section" id="ce-section">
+        <h2>2. Content Editable</h2>
+        <div id="ce-div" contenteditable="true">Edit this text and apply formatting...</div>
+    </div>
+
+    <div class="section" id="canvas-section">
+        <h2>3. Canvas Drawing</h2>
+        <div class="canvas-container">
+            <canvas id="draw-canvas" width="400" height="200"></canvas>
+        </div>
+        <button class="btn" id="btn-draw-rect">Draw Rectangle (Simulate app redraw)</button>
+    </div>
+
+    <div class="section" id="svg-section">
+        <h2>4. SVG Annotation</h2>
+        <div class="svg-container" id="svg-wrapper">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23eee'/%3E%3C/svg%3E" alt="background">
+            <div class="interactive-svg-container" id="svg-layer-container">
+                <svg id="annotation-svg" viewBox="0 0 400 200">
+                    <rect id="dynamic-svg-rect" x="50" y="50" width="100" height="100" fill="rgba(255, 0, 0, 0.3)" stroke="red" stroke-width="2" style="display: none;"/>
+                </svg>
+            </div>
+        </div>
+        <button class="btn" id="btn-toggle-svg">Toggle SVG Box (Simulate annotation)</button>
+    </div>
+
+    <div class="section" id="storage-section">
+        <h2>5. Storage State</h2>
+        <button class="btn" id="btn-save-storage">Save random value to localStorage</button>
+        <p>Current value: <span id="storage-val"></span></p>
+    </div>
+
+    <script>
+        // Canvas interaction
+        const canvas = document.getElementById('draw-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        
+        // Initial drawing to show canvas works
+        ctx.fillStyle = '#f0f8ff';
+        ctx.fillRect(0, 0, 400, 200);
+        ctx.font = '20px Arial';
+        ctx.fillStyle = '#000';
+        ctx.fillText('Draw here', 150, 100);
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDrawing) {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            }
+        });
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
+
+        document.getElementById('btn-draw-rect').addEventListener('click', () => {
+            ctx.fillStyle = 'rgba(0, 0, 255, 0.5)';
+            ctx.fillRect(Math.random() * 300, Math.random() * 150, 50, 50);
+        });
+
+        // SVG interaction
+        const btnToggleSvg = document.getElementById('btn-toggle-svg');
+        const dynamicRect = document.getElementById('dynamic-svg-rect');
+        btnToggleSvg.addEventListener('click', () => {
+            if (dynamicRect.style.display === 'none') {
+                dynamicRect.style.display = 'block';
+                dynamicRect.setAttribute('x', Math.random() * 300);
+                dynamicRect.setAttribute('y', Math.random() * 100);
+            } else {
+                dynamicRect.style.display = 'none';
+            }
+        });
+
+        // Storage interaction
+        const storageKey = 'test_qc_state_val';
+        const storageValSpan = document.getElementById('storage-val');
+        
+        function updateStorageDisplay() {
+            storageValSpan.innerText = localStorage.getItem(storageKey) || 'None';
+        }
+        
+        document.getElementById('btn-save-storage').addEventListener('click', () => {
+            localStorage.setItem(storageKey, 'Val_' + Math.floor(Math.random() * 10000));
+            updateStorageDisplay();
+        });
+        
+        // Initial load
+        updateStorageDisplay();
+        
+        // Simulate app hydration resetting the canvas if it's replayed
+        setTimeout(() => {
+            ctx.fillStyle = 'rgba(0, 255, 0, 0.1)';
+            ctx.fillRect(0, 0, 10, 10);
+        }, 1000);
+    </script>
+</body>
+</html>

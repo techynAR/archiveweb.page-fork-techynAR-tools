@@ -1,119 +1,297 @@
-<h1>
-    <div align="center">
-        <img alt="ArchiveWebpage" src="src/assets/brand/archivewebpage-lockup-color-dynamic.svg" width="90%">
-    </div>
-</h1>
+<div align="center">
 
-> **Disclaimer:** This archive web tool is a part of techynAR tools, by Aryan Sharma. This project is a fork of the original ArchiveWeb.page and is intended as an internal tool, not for commercial use. techynAR or Aryan Sharma is not related with or does not own the code of the original repository.
-> 
-> Visit [techynar.com](https://techynar.com) or [tools.techynar.com](https://tools.techynar.com) for more tools.
+<img alt="techynAR Tools" src="techynAR-tools-logo.png" width="48">
 
-ArchiveWeb.page (Fork) by techynAR is a JavaScript based application for interactive, high-fidelity web archiving that runs directly in the browser. The system can be used as a Chrome/Chromium based browser extension and also as a standalone Electron app.
+# ArchiveWeb.page (Fork) by techynAR
 
-The system creates, stores, and replays high-fidelity web archives stored directly in the browser's storage (via IndexedDB).
+A high fidelity browser archival extension for modern web applications, enhanced with experimental **Visual QC Snapshot** capabilities for dynamic websites, annotation platforms and internal QA workflows.
 
-For more detailed info on how to use the extension and standalone app, see the [original ArchiveWeb.page User Guide](https://archiveweb.page/guide).
+[Website](https://aw-fork.techynar.com) • [Download](https://aw-fork.techynar.com) • [techynAR Tools](https://tools.techynar.com) • [Original ArchiveWeb.page](https://archiveweb.page)
 
-The browser extension is available on the [Chrome Web Store](https://chrome.google.com/webstore/detail/webrecorder/fpeoodllldobpkbkabpblcfaogecpndd).
+</div>
 
-Downloads for the desktop are are available on the [GitHub Releases page](https://github.com/webrecorder/archiveweb.page/releases).
+---
 
-## Architecture
+## About
 
-The extension makes use of the Chrome debugging protocol to capture and save network traffic, and extends the [ReplayWeb.page](https://github.com/webrecorder/replayweb.page) UI and the [wabac.js](https://github.com/webrecorder/wabac.js) service worker system for replay and storage.
+**ArchiveWeb.page (Fork) by techynAR** is an open source fork of the excellent **ArchiveWeb.page** project by Webrecorder.
 
-## Development
+This fork was created to experiment with improved archival of modern, JavaScript-heavy web applications, especially those used for AI annotation, quality assurance, browser testing and internal review workflows.
 
-The Chromium extension and Electron app are built from the same source code for ease of development.
+The project retains full compatibility with the WACZ ecosystem while introducing new experimental capabilities focused on preserving the visual state of complex applications.
 
-### Prerequisites
+This repository exists primarily as an engineering project and internal utility, but is available publicly for anyone interested in contributing or building upon it.
 
-- Node >=12
+---
+
+# Why this fork?
+
+Modern web applications are no longer simple HTML pages.
+
+Annotation tools, React applications, canvas editors, SVG based interfaces and AI labeling platforms generate a large amount of client-side state that traditional web archives often cannot preserve accurately.
+
+This fork explores ways of archiving these applications with higher visual fidelity while remaining compatible with the existing ArchiveWeb.page ecosystem.
+
+Current areas of experimentation include:
+
+- Visual QC Snapshot
+- DOM State Preservation
+- Canvas Preservation
+- SVG Preservation
+- Form State Preservation
+- Better support for dynamic SPAs
+- Improved QA workflows
+- Experimental no-reload capture
+
+---
+
+# Features
+
+- High fidelity webpage archiving
+- Interactive browser recording
+- Portable WACZ archive generation
+- Replay using ReplayWeb.page
+- Local browser storage
+- Privacy focused architecture
+- Chrome Debugger Protocol based recording
+
+### Experimental Features (Fork)
+
+- Visual QC Snapshot
+- DOM state preservation
+- Canvas preservation
+- SVG preservation
+- Form value preservation
+- Annotation workflow support
+- Dynamic SPA archival improvements
+
+> Experimental features are actively under development and may change over time.
+
+---
+
+# Visual QC Snapshot
+
+One of the primary goals of this fork is introducing an experimental **Visual QC Snapshot** mode.
+
+When enabled, the extension captures the final client-side visual state immediately before recording stops.
+
+<div align="center">
+  <video src="demo.mp4" controls width="100%" poster=""></video>
+</div>
+
+The snapshot is intended to preserve information that normally exists only inside the browser after page load, including:
+
+- DOM state
+- Filled forms
+- Canvas drawings
+- SVG overlays
+- Annotation interfaces
+- Dynamic application state
+
+This feature is especially useful for:
+
+- AI annotation platforms
+- Browser QA
+- Internal review workflows
+- Research documentation
+- Dynamic web applications
+
+---
+
+# Architecture
+
+Like the original project, this fork is built on the Chrome Debugging Protocol and the excellent ReplayWeb.page ecosystem.
+
+Core components include:
+
+- ArchiveWeb.page
+- ReplayWeb.page
+- wabac
+- WACZ format
+- Chrome DevTools Protocol
+- IndexedDB storage
+
+The extension captures browser traffic and stores archives locally before exporting portable WACZ files for replay.
+
+---
+
+# Installation
+
+## Download
+
+Download the latest release from:
+
+https://aw-fork.techynar.com
+
+or build locally from source.
+
+---
+
+## Load the Extension in Chrome
+
+<div align="center">
+  <video src="install-demo.mp4" controls width="100%" poster=""></video>
+</div>
+
+1. Open:
+
+```
+chrome://extensions
+```
+
+2. Enable **Developer Mode** in the top-right corner.
+
+3. Click **Load unpacked** in the top-left toolbar.
+
+4. Select the extracted `techynar_archiveweb_extension` folder.
+
+5. Pin **ArchiveWeb.page (Fork)** to your toolbar and start archiving.
+
+---
+
+# Development
+
+## Prerequisites
+
+- Node.js
 - Yarn Classic (v1)
 
-### Installation
+## Clone
 
-To build the extension or Electron app locally for development, do the following:
+```bash
+git clone https://github.com/<your-username>/<repo-name>.git
 
-1. Clone this repo:
-   ```sh
-   git clone https://github.com/webrecorder/archiveweb.page.git
-   ```
-2. Change the working directory:
-   ```sh
-   cd archiveweb.page
-   ```
-3. Install dependencies:
-   ```sh
-   yarn install
-   ```
-4. Make development build:
-   ```sh
-   yarn build-dev
-   ```
-
-The development build can now be used to develop the extension or Electron app.
-
-### Developing the Chromium extension
-
-To install the extension locally, load the development build as an unpacked extension:
-
-1. Open the Chrome Extensions page ([chrome://extensions](chrome://extensions)).
-
-2. Choose 'Load Unpacked Extension' and point to the `./dist/ext` directory in your local copy of this repo.
-
-3. Click the extension icon to show the extension popup, start archiving, etc...
-
-#### Update extension on code changes
-
-To watch source code files and recompile the development build on change, run:
-
-```sh
-yarn run start-ext
+cd <repo-name>
 ```
 
-Now, saving changes to source will automatically rebuild the `dist/ext` directory.
+## Install
 
-After making changes, the extension still needs to be reloaded in the browser.
-
-1. From the Chrome extensions page, click the reload button to load the latest version.
-
-2. Click the extension icon to show the extension popup, start recording, etc... The dev build of the extension will be a different color from the production version.
-
-### Developing the Electron app
-
-To start the Electron app using development build:
-
-```sh
-yarn run start-electron
+```bash
+yarn install
 ```
 
-The Electron app will open recording in a new window. It is is designed to support Flash, better support for IPFS sharing.
+## Development Build
 
-#### Update app on change
-
-Currently, the dev workflow for the Electron app does not support automatically rebuilding on file changes.
-
-After making changes, rerun `yarn run build-dev` and `yarn run start-electron` to view your changes in the app.
-
-### Using a local wabac.js
-
-If you're testing a local version of wabac.js, you can configure your local copy of archiveweb.page to use it.
-
-1. In the wabac.js repo, run `yarn link`.
-2. In the archiveweb.page repo, run `yarn link "@webrecorder/wabac"`
-
-When you want to switch back to a release build of wabac.js, run these steps from the archiveweb.page repo:
-
-1. `yarn unlink`
-2. `yarn install --force`
-
-## Standalone Build
-
-To create a platform-specific binary, run:
-
-```sh
-yarn run pack
+```bash
+yarn build-dev
 ```
 
-The standalone app will then be available in the `./dist/` directory.
+---
+
+## Watch Mode
+
+```bash
+yarn start-ext
+```
+
+Reload the unpacked extension after every build.
+
+---
+
+## Production Build
+
+```bash
+yarn build
+```
+
+---
+
+## Electron
+
+The Electron application continues to build from the shared codebase.
+
+Run:
+
+```bash
+yarn start-electron
+```
+
+---
+
+# Project Structure
+
+```
+src/
+dist/
+public/
+test/
+```
+
+The Chromium extension and Electron application continue to share the majority of the same source code.
+
+---
+
+# Privacy
+
+This extension is designed with a local-first philosophy.
+
+- No analytics
+- No telemetry
+- No cloud sync
+- No user tracking
+
+Archives remain inside your browser unless you explicitly export or share them.
+
+Experimental IPFS sharing remains optional and disabled by default.
+
+---
+
+# Roadmap
+
+Current areas of development include:
+
+- Better dynamic application support
+- Visual QC Snapshot improvements
+- Improved annotation preservation
+- Experimental no-reload capture
+- Better replay fidelity
+- Additional testing tools
+
+---
+
+# Credits
+
+This project is based on the outstanding work by the Webrecorder team.
+
+Original Project:
+https://github.com/webrecorder/archiveweb.page
+
+Replay Engine:
+https://github.com/webrecorder/replayweb.page
+
+wabac:
+https://github.com/webrecorder/wabac.js
+
+---
+
+# Disclaimer
+
+ArchiveWeb.page (Fork) by techynAR is an independent fork of the original ArchiveWeb.page project.
+
+This repository is **not affiliated with, endorsed by, or maintained by the original ArchiveWeb.page authors or Webrecorder**.
+
+All credit for the original architecture, recording engine and replay ecosystem belongs to their respective authors.
+
+This fork exists to explore additional archival workflows and experimental features while building upon the original open source foundation.
+
+---
+
+# License
+
+This repository continues to follow the license of the upstream ArchiveWeb.page project unless explicitly stated otherwise.
+
+Please refer to the LICENSE file included in this repository.
+
+---
+
+<div align="center">
+
+<img alt="techynAR Tools" src="techynAR-tools-logo.png" width="32">
+
+<br>
+
+Part of **techynAR Tools** · Built by **Aryan Sharma**
+
+[techynar.com](https://techynar.com) • [tools.techynar.com](https://tools.techynar.com)
+
+</div>

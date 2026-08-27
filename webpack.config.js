@@ -67,6 +67,9 @@ const optimization = {
 /** @type {import('webpack').Configuration['resolve']} */
 const resolve = {
   extensions: [".ts", ".js"],
+  alias: {
+    "@protobufjs/inquire": path.resolve(__dirname, "src", "inquire-stub.js"),
+  },
   plugins: [new TsconfigPathsPlugin()],
 };
 

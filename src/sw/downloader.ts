@@ -269,7 +269,7 @@ class Downloader {
 
     this.alreadyDecoded = !coll.config["decode"] && !coll.config["loadUrl"];
 
-    this.softwareString = softwareString || "ArchiveWeb.page";
+    this.softwareString = softwareString || "ArchiveWeb.page (Fork) by techynAR";
 
     this.uuidNamespace = uuidNamespace || DEFAULT_UUID_NAMESPACE;
 
@@ -789,6 +789,8 @@ class Downloader {
         ? await this.db.getPages(this.pageList)
         : await this.db.getAllPages()
     ) as ExtPageEntry[];
+    console.log("PIPELINE: generatePages fetched pages from DB", { pageCount: pageIter.length, pageList: this.pageList, dbName: this.db.name, collId: this.collId });
+
 
     yield JSON.stringify({
       format: "json-pages-1.0",

@@ -1187,7 +1187,9 @@ class Recorder {
 
   // @ts-expect-error - TS7006 - Parameter 'currPage' implicitly has an 'any' type. | TS7006 - Parameter 'domSnapshot' implicitly has an 'any' type. | TS7006 - Parameter 'finished' implicitly has an 'any' type.
   commitPage(currPage, domSnapshot, finished) {
+    console.log("PIPELINE: commitPage start", { currPage, finished });
     if (this.isEmptyPage(currPage)) {
+      console.log("PIPELINE: commitPage aborted (isEmptyPage = true)");
       return;
     }
     if (domSnapshot) {
@@ -1198,6 +1200,7 @@ class Recorder {
 
     currPage.finished = finished;
 
+    console.log("PIPELINE: commitPage calling _doAddPage", { currPage });
     // @ts-expect-error - TS2339 - Property '_doAddPage' does not exist on type 'Recorder'.
     const res = this._doAddPage(currPage);
     // @ts-expect-error - TS2339 - Property '_cachePageInfo' does not exist on type 'Recorder'.
@@ -1308,8 +1311,89 @@ class Recorder {
     this.firstPageStarted = true;
   }
 
+  async setupNoReloadPage() {
+    console.log("NO_RELOAD_RUNTIME_BUILD = 'FULLCOMMIT_TEST_1'");
+    console.log("PIPELINE: setupNoReloadPage start");
+    // 1. Get the current frame tree to initialize frameId and loaderId
+    const treeResult = await this.send("Page.getFrameTree");
+    const frame = treeResult?.frameTree?.frame;
+    const url = frame?.url || "about:blank";
+
+    // 2. Initialize the internal page tracking (mimics Page.frameNavigated)
+    if (frame) {
+      this.initPage({ frame }, []);
+    } else {
+      this._initNewPage(url, "text/html");
+    }
+
+    
+    // 3. Signal to the UI that we have started (clears the "Waiting for reload" text)
+    this.initFirstPage();
+
+    // 4. Extract the current document (including DOCTYPE) to use as the synthetic HTML resource
+    const extractionScript = `
+      (function() {
+        let doctype = "";
+        if (document.doctype) {
+          doctype = new XMLSerializer().serializeToString(document.doctype) + "\\n";
+        }
+        return {
+          html: doctype + document.documentElement.outerHTML,
+          title: document.title
+        };
+      })()
+    `;
+
+    try {
+      const { result } = await this.pageEval("extract_doc", extractionScript, []);
+      if (result && result.value) {
+        const { html, title } = result.value;
+
+        // @ts-expect-error - TS2339 - Property 'pageInfo' does not exist on type 'Recorder'.
+        if (this.pageInfo) {
+          // @ts-expect-error
+          this.pageInfo.title = title || "";
+          
+          // @ts-expect-error - TS2339 - Property 'pageInfo' does not exist on type 'Recorder'.
+          this.pageInfo.ts = Date.now();
+          // @ts-expect-error
+          this.pageInfo.text = this.parseTextFromDOMSnapshot(html);
+        }
+
+        const payload = new TextEncoder().encode(html);
+
+        // Synthesize a RequestResponseInfo object representing the loaded document
+        const reqresp = {
+          // @ts-expect-error
+          requestId: this.loaderId,
+          url: url,
+          method: "GET",
+          // @ts-expect-error
+          frameId: this.frameId,
+          ts: Date.now(),
+          type: "Document",
+          mime: "text/html",
+          payload: payload,
+          respHeaders: {
+            "Content-Type": "text/html; charset=utf-8",
+            "WARC-Capture-Mode": "no-reload-snapshot"
+          }
+        };
+
+        // Pass it through the standard network commit pipeline (mimics Network.loadingFinished)
+        await this.fullCommit(reqresp, []);
+
+        // Finalize page metadata (mimics Page.loadEventFired)
+        await this.updatePage([]);
+      }
+    } catch (e) {
+      console.warn("Failed to extract current document in no-reload mode", e);
+    }
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isEmptyPage(pageInfo: any) {
+    console.log("PIPELINE: isEmptyPage check", { pageInfo });
     if (!pageInfo?.url || !pageInfo.ts || pageInfo.url === "about:blank") {
       return true;
     }
@@ -1318,6 +1402,7 @@ class Recorder {
 
   // @ts-expect-error - TS7006 - Parameter 'url' implicitly has an 'any' type. | TS7006 - Parameter 'mime' implicitly has an 'any' type.
   _initNewPage(url, mime) {
+    console.log("PIPELINE: _initNewPage start", { url, mime });
     // @ts-expect-error - TS2339 - Property 'pageInfo' does not exist on type 'Recorder'.
     this.pageInfo = {
       id: this.newPageId(),
@@ -1367,7 +1452,8 @@ class Recorder {
 
   // @ts-expect-error - TS7006 - Parameter 'sessions' implicitly has an 'any' type.
   async updatePage(sessions) {
-    //console.log("updatePage", this.pageInfo);
+    // @ts-expect-error
+    console.log("PIPELINE: updatePage start", { pageInfo: this.pageInfo });
 
     // @ts-expect-error - TS2339 - Property 'pageInfo' does not exist on type 'Recorder'.
     if (!this.pageInfo) {
@@ -1411,8 +1497,10 @@ class Recorder {
       this.loadFavIcon(favIcon, sessions);
     }
 
+    console.log("PIPELINE: updatePage calling commitPage");
     // @ts-expect-error - TS2339 - Property 'pageInfo' does not exist on type 'Recorder'.
     await this.commitPage(this.pageInfo, domSnapshot, false);
+    console.log("PIPELINE: updatePage commitPage finished");
 
     this.updateStatus();
 

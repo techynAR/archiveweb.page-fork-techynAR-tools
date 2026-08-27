@@ -23,6 +23,7 @@ class BrowserRecorder extends Recorder {
       port = null,
       openWinMap = null,
       autorun = false,
+      noReload = false,
     },
   ) {
     super();
@@ -39,6 +40,8 @@ class BrowserRecorder extends Recorder {
     this.openWinMap = openWinMap;
     // @ts-expect-error - TS2339 - Property 'autorun' does not exist on type 'BrowserRecorder'.
     this.autorun = autorun;
+    // @ts-expect-error - TS2339 - Property 'noReload' does not exist on type 'BrowserRecorder'.
+    this.noReload = noReload;
     // @ts-expect-error - TS2339 - Property 'isAttached' does not exist on type 'BrowserRecorder'.
     this.isAttached = false;
 
@@ -225,6 +228,11 @@ class BrowserRecorder extends Recorder {
           // @ts-expect-error - TS2339 - Property 'openUrl' does not exist on type 'BrowserRecorder'.
           url: this.openUrl,
         });
+      } else if (
+        // @ts-expect-error - TS2339 - Property 'noReload' does not exist on type 'BrowserRecorder'.
+        this.noReload
+      ) {
+        await this.setupNoReloadPage();
       } else {
         // @ts-expect-error - TS2345 - Argument of type '{ ignoreCache: boolean; scriptToEvaluateOnLoad: string; }' is not assignable to parameter of type 'null | undefined'.
         await this.send("Page.reload", {
@@ -336,14 +344,20 @@ class BrowserRecorder extends Recorder {
 
   // @ts-expect-error - TS7006 - Parameter 'pageInfo' implicitly has an 'any' type.
   _doAddPage(pageInfo) {
+    // @ts-expect-error
+    console.log("PIPELINE: _doAddPage start", { pageInfo, hasDb: !!this.db });
     if (!pageInfo.url) {
       console.warn("Empty Page, Skipping");
       return;
     }
     // @ts-expect-error - TS2339 - Property 'db' does not exist on type 'BrowserRecorder'.
     if (this.db) {
+      // @ts-expect-error
+      console.log("PIPELINE: _doAddPage calling this.db.addPage", { dbName: this.db.name, collId: this.collId });
       // @ts-expect-error - TS2339 - Property 'db' does not exist on type 'BrowserRecorder'.
       return this.db.addPage(pageInfo);
+    } else {
+      console.log("PIPELINE: _doAddPage failed, no db!");
     }
   }
 

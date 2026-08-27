@@ -34,15 +34,31 @@ const disabledCSPTabs = new Set();
 function main() {
   chrome.action.setBadgeBackgroundColor({ color: "#4d7c0f" });
 
-  chrome.contextMenus.create({
-    id: "toggle-rec",
-    title: "Start Recording",
-    contexts: ["browser_action"],
-  });
-  chrome.contextMenus.create({
-    id: "view-rec",
-    title: "View Web Archives",
-    contexts: ["all"],
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create(
+      {
+        id: "toggle-rec",
+        title: "Start Recording",
+        contexts: ["action"],
+      },
+      () => {
+        if (chrome.runtime.lastError) {
+          // ignore
+        }
+      },
+    );
+    chrome.contextMenus.create(
+      {
+        id: "view-rec",
+        title: "View Web Archives",
+        contexts: ["all"],
+      },
+      () => {
+        if (chrome.runtime.lastError) {
+          // ignore
+        }
+      },
+    );
   });
 }
 
@@ -78,9 +94,9 @@ function popupHandler(port) {
         break;
 
       case "startRecording": {
-        const { collId, autorun } = message;
+        const { collId, autorun, noReload } = message;
         // @ts-expect-error - TS2554 - Expected 2 arguments, but got 3.
-        startRecorder(tabId, { collId, port, autorun }, message.url);
+        startRecorder(tabId, { collId, port, autorun, noReload }, message.url);
         break;
       }
 
@@ -333,8 +349,10 @@ async function disableCSPForTab(tabId) {
 
   await new Promise((resolve) => {
     chrome.debugger.attach({ tabId }, "1.3", () => {
-      // @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-      resolve();
+      if (chrome.runtime.lastError) {
+        // ignore if already attached or restricted
+      }
+      resolve(null);
     });
   });
 
@@ -344,7 +362,12 @@ async function disableCSPForTab(tabId) {
       "Page.setBypassCSP",
       { enabled: true },
       // @ts-expect-error - TS7006 - Parameter 'resp' implicitly has an 'any' type.
-      (resp) => resolve(resp),
+      (resp) => {
+        if (chrome.runtime.lastError) {
+          // ignore
+        }
+        resolve(resp);
+      },
     );
   });
 
@@ -360,8 +383,10 @@ async function disableCSPForTab(tabId) {
 
   await new Promise((resolve) => {
     chrome.debugger.detach({ tabId }, () => {
-      // @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-      resolve();
+      if (chrome.runtime.lastError) {
+        // ignore
+      }
+      resolve(null);
     });
   });
 }

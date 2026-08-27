@@ -1,6 +1,6 @@
 {
   "name": "@webrecorder/archivewebpage",
-  "productName": "ArchiveWeb.page",
+  "productName": "ArchiveWeb.page (Fork) by techynAR",
   "version": "0.16.2",
   "main": "index.js",
   "description": "Create Web Archives directly in your browser",
@@ -54,6 +54,7 @@
     "generate-json-webpack-plugin": "^2.0.0",
     "mini-css-extract-plugin": "^2.3.0",
     "prettier": "^3.1.1",
+    "puppeteer": "^25.9.0",
     "raw-loader": "^4.0.2",
     "sass": "^1.77.6",
     "sass-loader": "^12.1.0",
@@ -92,9 +93,9 @@
   },
   "build": {
     "afterSign": "build/notarize.js",
-    "productName": "ArchiveWeb.page",
+    "productName": "ArchiveWeb.page (Fork) by techynAR",
     "asar": true,
-    "appId": "net.webrecorder.archivewebpage",
+    "appId": "com.techynar.tools",
     "artifactName": "${productName}-${version}.${ext}",
     "extraMetadata": {
       "main": "dist/electron/electron.js"
@@ -106,7 +107,7 @@
       "dist/electron/prebuilds/${platform}-${arch}/*"
     ],
     "dmg": {
-      "title": "ArchiveWeb.page"
+      "title": "ArchiveWeb.page (Fork) by techynAR"
     },
     "mac": {
       "category": "public.app-category.utilities",

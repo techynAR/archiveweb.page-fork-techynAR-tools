@@ -107,7 +107,7 @@ export class Signer {
 
   constructor(softwareString: string, opts: { cacheSig?: boolean } = {}) {
     this._store = new KeyStore();
-    this.softwareString = softwareString || "ArchiveWeb.page";
+    this.softwareString = softwareString || "ArchiveWeb.page (Fork) by techynAR";
     this.cacheSig = opts.cacheSig || false;
   }
 

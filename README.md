@@ -4,11 +4,15 @@
     </div>
 </h1>
 
-ArchiveWeb.page is a JavaScript based application for interactive, high-fidelity web archiving that runs directly in the browser. The system can be used as a Chrome/Chromium based browser extension and also as a standalone Electron app.
+> **Disclaimer:** This archive web tool is a part of techynAR tools, by Aryan Sharma. This project is a fork of the original ArchiveWeb.page and is intended as an internal tool, not for commercial use. techynAR or Aryan Sharma is not related with or does not own the code of the original repository.
+> 
+> Visit [techynar.com](https://techynar.com) or [tools.techynar.com](https://tools.techynar.com) for more tools.
+
+ArchiveWeb.page (Fork) by techynAR is a JavaScript based application for interactive, high-fidelity web archiving that runs directly in the browser. The system can be used as a Chrome/Chromium based browser extension and also as a standalone Electron app.
 
 The system creates, stores, and replays high-fidelity web archives stored directly in the browser's storage (via IndexedDB).
 
-For more detailed info on how to use the extension and standalone app, see the [ArchiveWeb.page User Guide](https://archiveweb.page/guide).
+For more detailed info on how to use the extension and standalone app, see the [original ArchiveWeb.page User Guide](https://archiveweb.page/guide).
 
 The browser extension is available on the [Chrome Web Store](https://chrome.google.com/webstore/detail/webrecorder/fpeoodllldobpkbkabpblcfaogecpndd).
 

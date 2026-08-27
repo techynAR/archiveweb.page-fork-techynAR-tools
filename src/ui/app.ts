@@ -160,7 +160,7 @@ class ArchiveWebApp extends ReplayWebApp {
   }
 
   get appName() {
-    return "ArchiveWeb.page";
+    return "ArchiveWeb.page (Fork) by techynAR";
   }
 
   static get properties() {
@@ -530,7 +530,7 @@ class ArchiveWebApp extends ReplayWebApp {
               </button>
               <div class="rightbar">
                 <div class="infomsg is-hidden-mobile">
-                  The ArchiveWeb.page ${IS_APP ? "App" : "Extension"} allows you
+                  The ArchiveWeb.page (Fork) by techynAR ${IS_APP ? "App" : "Extension"} allows you
                   to archive webpages directly in your browser!
                 </div>
                 <button
@@ -949,7 +949,7 @@ class ArchiveWebApp extends ReplayWebApp {
         <div class="modal-background" @click="${this.onAboutClose}"></div>
           <div class="modal-card">
             <header class="modal-card-head">
-              <p class="modal-card-title">About ArchiveWeb.page ${this.getDeployType()}</p>
+              <p class="modal-card-title">About ArchiveWeb.page (Fork) by techynAR ${this.getDeployType()}</p>
               <button class="delete" aria-label="close" @click="${
                 this.onAboutClose
               }"></button>
@@ -967,32 +967,30 @@ class ArchiveWebApp extends ReplayWebApp {
                       IS_APP
                         ? html`
                             <p>
-                              ArchiveWeb.page App is a standalone app for Mac,
+                              ArchiveWeb.page (Fork) by techynAR App is a standalone app for Mac,
                               Windows and Linux that allows users to archive
                               webpages as they browse
                             </p>
                           `
                         : html` <p>
-                            ArchiveWeb.page allows users to archive webpages
+                            ArchiveWeb.page (Fork) by techynAR allows users to archive webpages
                             directly in your browser!
                           </p>`
                     }
                   </div>
 
-                  <p>See the <a href="https://archiveweb.page/guide" target="_blank">ArchiveWeb.page Guide</a> for more info on how to use this tool.</p>
+                  <p>See the <a href="https://archiveweb.page/guide" target="_blank">original ArchiveWeb.page Guide</a> for more info on how to use this tool.</p>
 
-                  <p>Full source code is available at:
-                    <a href="https://github.com/webrecorder/archiveweb.page" target="_blank">https://github.com/webrecorder/archiveweb.page</a>
-                  </p>
-
-                  <p>ArchiveWeb.page is part of the <a href="https://webrecorder.net/" target="_blank">Webrecorder Project</a>.</p>
+                  <p><strong>Disclaimer:</strong> This archive web tool is a part of techynAR tools, by Aryan Sharma. This project is a fork of the original ArchiveWeb.page and is intended as an internal tool, not for commercial use.</p>
+                  <p>techynAR or Aryan Sharma is not related with or does not own the code of the original repo.</p>
+                  <p>Visit <a href="https://techynar.com" target="_blank">techynar.com</a> or <a href="https://tools.techynar.com" target="_blank">tools.techynar.com</a> for more tools.</p>
 
                   <h3>Privacy Policy</h3>
-                  <p class="is-size-7">ArchiveWeb.page allows users to archive what they browse, storing captured data directly in the browser.
+                  <p class="is-size-7">ArchiveWeb.page (Fork) by techynAR allows users to archive what they browse, storing captured data directly in the browser.
                   Users can downloaded this data as files to their hard drive. Users can also delete any and all archived data at any time.
-                  ArchiveWeb.page does not collect any usage or tracking data.</p>
+                  ArchiveWeb.page (Fork) by techynAR does not collect any usage or tracking data.</p>
 
-                  <p class="is-size-7">ArchiveWeb.page includes an experimental sharing option for each archive collection. Users can choose to share select archives on a peer-to-peer network (IPFS) via a unique id.
+                  <p class="is-size-7">ArchiveWeb.page (Fork) by techynAR includes an experimental sharing option for each archive collection. Users can choose to share select archives on a peer-to-peer network (IPFS) via a unique id.
                   Once shared on this network, the data may become accessible to others.
                   All archived items are private and not shared by default, unless explicitly opted-in by the user. (A warning is displayed when sharing via IPFS.)</p>
 

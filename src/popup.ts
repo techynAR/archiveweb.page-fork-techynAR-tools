@@ -86,6 +86,8 @@ class RecPopup extends LitElement {
     this.behaviorMsg = "";
     // @ts-expect-error - TS2339 - Property 'autorun' does not exist on type 'RecPopup'.
     this.autorun = false;
+    // @ts-expect-error
+    this.noReload = false;
   }
 
   static get properties() {
@@ -110,6 +112,7 @@ class RecPopup extends LitElement {
       behaviorResults: { type: Object },
       behaviorMsg: { type: String },
       autorun: { type: Boolean },
+      noReload: { type: Boolean },
     };
   }
 
@@ -652,6 +655,26 @@ class RecPopup extends LitElement {
           Start With Autopilot
         </label>
       </div>
+      <div class="field">
+        <label class="checkbox is-size-7">
+          <input
+            type="checkbox"
+            ?disabled="${
+              // @ts-expect-error
+              this.recording
+            }"
+            ?checked="${
+              // @ts-expect-error
+              this.noReload
+            }"
+            @change="${
+              // @ts-expect-error
+              (e) => (this.noReload = e.target.checked)
+            }"
+          />
+          Start No-Reload Mode (Testing)
+        </label>
+      </div>
     `;
   }
 
@@ -942,6 +965,8 @@ class RecPopup extends LitElement {
       url: this.pageUrl,
       // @ts-expect-error - TS2339 - Property 'autorun' does not exist on type 'RecPopup'.
       autorun: this.autorun,
+      // @ts-expect-error
+      noReload: this.noReload,
     });
     // @ts-expect-error - TS2339 - Property 'waitingForStart' does not exist on type 'RecPopup'.
     this.waitingForStart = true;

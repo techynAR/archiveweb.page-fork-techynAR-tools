@@ -1,5 +1,5 @@
 {
-  "name": "Webrecorder ArchiveWeb.page",
+  "name": "Webrecorder ArchiveWeb.page fork by techynAR",
   "description": "Create high-fidelity web archives directly in your browser",
   "version": "$VERSION",
   "permissions": [
@@ -23,7 +23,7 @@
     "default_icon": {
       "32": "$ICON"
     },
-    "default_title": "Webrecorder ArchiveWeb.page",
+    "default_title": "Webrecorder ArchiveWeb.page fork by techynAR",
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [

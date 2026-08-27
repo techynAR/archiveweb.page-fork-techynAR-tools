@@ -1,6 +1,6 @@
 <div align="center">
 
-<img alt="techynAR Tools" src="techynAR-tools-logo.png" width="48">
+<img alt="ArchiveWeb.page (Fork) by techynAR" src="src/assets/icons/recLogo.svg" width="64">
 
 # ArchiveWeb.page (Fork) by techynAR
 
@@ -75,10 +75,6 @@ One of the primary goals of this fork is introducing an experimental **Visual QC
 
 When enabled, the extension captures the final client-side visual state immediately before recording stops.
 
-<div align="center">
-  <video src="demo.mp4" controls width="100%" poster=""></video>
-</div>
-
 The snapshot is intended to preserve information that normally exists only inside the browser after page load, including:
 
 - DOM state
@@ -128,10 +124,6 @@ or build locally from source.
 ---
 
 ## Load the Extension in Chrome
-
-<div align="center">
-  <video src="install-demo.mp4" controls width="100%" poster=""></video>
-</div>
 
 1. Open:
 
@@ -286,7 +278,7 @@ Please refer to the LICENSE file included in this repository.
 
 <div align="center">
 
-<img alt="techynAR Tools" src="techynAR-tools-logo.png" width="32">
+<img alt="techynAR Tools" src="src/assets/icons/recLogo.svg" width="32">
 
 <br>
 
